@@ -4,7 +4,7 @@ import React from 'react';
 import { Button } from './ui/button';
 import Link from 'next/link';
 
-const EmptyState = ({ title, search, buttonLink, buttonText }: EmptyStateProps) => {
+const EmptyState = ({ title, search, buttonLink, buttonText, buttonIcon }: EmptyStateProps) => {
   return (
     <section className="flex-center size-full flex-col gap-3">
       <Image src="/icons/emptyState.svg" width={250} height={250} alt="empty state" />
@@ -18,7 +18,7 @@ const EmptyState = ({ title, search, buttonLink, buttonText }: EmptyStateProps) 
         {buttonLink && (
           <Button className="bg-orange-1">
             <Link href={buttonLink} className="flex gap-1">
-              <Image src="/icons/discover.svg" width={20} height={20} alt="discover" />
+              <Image src={buttonIcon} width={20} height={20} alt="discover" />
               <h1 className="text-16 font-extrabold text-white-1">{buttonText}</h1>
             </Link>
           </Button>
