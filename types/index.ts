@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import { Dispatch, SetStateAction } from 'react';
-
+import { StaticImageData } from 'next/image';
 import { Id } from '@/convex/_generated/dataModel';
 
 export interface EmptyStateProps {
@@ -9,6 +9,7 @@ export interface EmptyStateProps {
   search?: boolean;
   buttonText?: string;
   buttonLink?: string;
+  buttonIcon: string | StaticImageData;
 }
 
 export interface TopPodcastersProps {
@@ -49,8 +50,6 @@ export interface ProfilePodcastProps {
   podcasts: PodcastProps[];
   listeners: number;
 }
-
-// export type VoiceType = 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer';
 
 export interface GeneratePodcastProps {
   voiceType: string;

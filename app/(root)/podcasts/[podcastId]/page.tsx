@@ -28,7 +28,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
           <h2 className="text-16 font-bold text-white-1">{podcast?.views}</h2>
         </figure>
       </header>
-      <PodcastDetailPlayer isOwner={isOwner} podcastid={podcast._id} {...podcast} />
+      <PodcastDetailPlayer isOwner={isOwner} podcastId={podcast._id} {...podcast} />
       <p className="text-16 pb-8 pt-[45px] font-medium text-white-2 max-md:text-center">
         {podcast?.podcastDescription}
       </p>
@@ -49,7 +49,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
             {similarPodcasts?.map(({ _id, podcastTitle, podcastDescription, imageUrl }) => (
               <PodcastCard
                 key={_id}
-                imgUrl={imageUrl}
+                imgUrl={imageUrl!}
                 title={podcastTitle}
                 description={podcastDescription}
                 podcastId={_id}
@@ -62,6 +62,7 @@ const PodcastDetails = ({ params: { podcastId } }: { params: { podcastId: Id<'po
               title="No similar podcast found"
               buttonLink="/discover"
               buttonText="Discover more podcasts"
+              buttonIcon="/icons/discover.svg"
             />
           </>
         )}
