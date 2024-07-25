@@ -1,58 +1,66 @@
 'use client';
+
+import { useQuery } from 'convex/react';
+
 import EmptyState from '@/components/EmptyState';
 import LoaderSpinner from '@/components/LoaderSpinner';
 import PodcastCard from '@/components/PodcastCard';
 import ProfileCard from '@/components/ProfileCard';
-
 import { api } from '@/convex/_generated/api';
-import { useUser } from '@clerk/nextjs';
-import { useQuery } from 'convex/react';
-import Image from 'next/image';
 
-import React from 'react';
+const ProfilePage = ({
+  params,
+}: {
+  params: {
+    profileId: string;
+  };
+}) => {
+  const user = useQuery(api.users.getUserById, {
+    clerkId: params.profileId,
+  });
+  const podcastsData = useQuery(api.podcasts.getPodcastByAuthorId, {
+    authorId: params.profileId,
+  });
 
-const Profile = ({ params: { profileId } }: { params: { profileId: string } }) => {
-  const podcastsData = useQuery(api.podcasts.getPodcastByAuthorId, { authorId: profileId });
-  const userData = useQuery(api.users.getUserById, { clerkId: profileId });
-  // console.log(podcastsData);
-  const userFirstName = userData?.name;
-  const imageUrl = userData?.imageUrl;
-  // const  userData = use
+  if (!user || !podcastsData) return <LoaderSpinner />;
 
-  if (!podcastsData) return <LoaderSpinner />;
   return (
-    <section className="flex w-full flex-col">
-      <header className="mt-9 flex items-center justify-between">
-        <h1 className="text-20 font-bold text-white-1">Podcaster Profile</h1>
-      </header>
-      <ProfileCard userFirstName={userFirstName} imageUrl={imageUrl} podcastData={podcastsData!} />
-      <section className="mt-8 flex flex-col gap-5">
+    <section className="mt-9 flex flex-col">
+      <h1 className="text-20 font-bold text-white-1 max-md:text-center">Podcaster Profile</h1>
+      <div className="mt-6 flex flex-col gap-6 max-md:items-center md:flex-row">
+        <ProfileCard
+          podcastData={podcastsData!}
+          imageUrl={user?.imageUrl!}
+          userFirstName={user?.name!}
+        />
+      </div>
+      <section className="mt-9 flex flex-col gap-5">
         <h1 className="text-20 font-bold text-white-1">All Podcasts</h1>
         {podcastsData && podcastsData.podcasts.length > 0 ? (
           <div className="podcast_grid">
-            {podcastsData?.podcasts?.map(({ _id, podcastTitle, podcastDescription, imageUrl }) => (
-              <PodcastCard
-                key={_id}
-                imgUrl={imageUrl!}
-                title={podcastTitle}
-                description={podcastDescription}
-                podcastId={_id}
-              />
-            ))}
+            {podcastsData?.podcasts
+              ?.slice(0, 4)
+              .map((podcast) => (
+                <PodcastCard
+                  key={podcast._id}
+                  imgUrl={podcast.imageUrl!}
+                  title={podcast.podcastTitle!}
+                  description={podcast.podcastDescription}
+                  podcastId={podcast._id}
+                />
+              ))}
           </div>
         ) : (
-          <>
-            <EmptyState
-              title="You have not created any podcasts yet"
-              buttonLink="/create-podcast"
-              buttonText="Create a Podcast"
-              buttonIcon="/icons/microphone.svg"
-            />
-          </>
+          <EmptyState
+            title="You have not created any podcasts yet"
+            buttonLink="/create-podcast"
+            buttonText="Create Podcast"
+            buttonIcon="/icons/microphone.svg"
+          />
         )}
       </section>
     </section>
   );
 };
 
-export default Profile;
+export default ProfilePage;
