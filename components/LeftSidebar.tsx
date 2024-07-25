@@ -35,10 +35,8 @@ const LeftSidebar = () => {
         {sidebarLinks.map(({ route, label, imgURL }) => {
           const isActive = pathname === route || pathname.startsWith(`/${route}`);
           // console.log(route);
-          if (route === '/profile' && user) {
-            route = `/profile/${user?.id}`;
-          } else {
-            route = `/sign-in`;
+          if (route === '/profile') {
+            route = user ? `/profile/${user?.id}` : `/sign-in`;
           }
           return (
             <Link
